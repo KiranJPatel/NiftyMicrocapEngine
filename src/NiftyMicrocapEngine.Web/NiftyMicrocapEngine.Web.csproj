@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NiftyMicrocapEngine.Domain\NiftyMicrocapEngine.Domain.csproj" />
+    <ProjectReference Include="..\NiftyMicrocapEngine.Application\NiftyMicrocapEngine.Application.csproj" />
+    <ProjectReference Include="..\NiftyMicrocapEngine.Infrastructure.YahooFinance\NiftyMicrocapEngine.Infrastructure.YahooFinance.csproj" />
+    <ProjectReference Include="..\NiftyMicrocapEngine.Infrastructure.BrokerData\NiftyMicrocapEngine.Infrastructure.BrokerData.csproj" />
+    <ProjectReference Include="..\NiftyMicrocapEngine.Infrastructure.Persistence\NiftyMicrocapEngine.Infrastructure.Persistence.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

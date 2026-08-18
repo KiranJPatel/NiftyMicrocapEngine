@@ -1,0 +1,271 @@
+/* Nifty Microcap Engine dashboard theme, per build spec section 20.1:
+   dark, data-dense "trading terminal" — near-black background, high-contrast
+   monospace/tabular type for numbers, restrained accent palette (green/red
+   for directional confidence bands, amber for Watch/Hold, blue-grey neutral
+   chrome). No decorative styling. */
+
+:root {
+  --bg: #0d1117;
+  --bg-panel: #12161f;
+  --bg-panel-alt: #161b26;
+  --border: #262c3a;
+  --text-primary: #d6dbe4;
+  --text-muted: #7d8798;
+  --accent-blue-grey: #4a5568;
+  --green: #2ea043;
+  --green-bright: #3fb950;
+  --red: #d0483d;
+  --red-bright: #f85149;
+  --amber: #d29922;
+  --mono: 'Consolas', 'SF Mono', 'Cascadia Code', 'Roboto Mono', monospace;
+  --sans: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  font-size: 13px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.app-controls { display: flex; align-items: center; gap: 10px; }
+.app-controls label { color: var(--text-muted); font-size: 12px; }
+
+.app-controls input[type="date"],
+.app-controls input[type="text"],
+.app-controls select {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 5px 8px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+#run-scan-btn {
+  background: var(--accent-blue-grey);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 3px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 12px;
+}
+#run-scan-btn:hover { background: #5a6578; }
+#run-scan-btn:disabled { opacity: 0.5; cursor: default; }
+
+.status-text { color: var(--text-muted); font-family: var(--mono); font-size: 12px; }
+.status-text.error { color: var(--red-bright); }
+
+.app-main { padding: 20px; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+
+.stat-block { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-value { font-family: var(--mono); font-size: 15px; font-weight: 600; }
+
+.toolbar-filters { margin-left: auto; display: flex; gap: 8px; }
+
+table { width: 100%; border-collapse: collapse; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+
+thead th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--bg-panel-alt);
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+thead th:hover { color: var(--text-primary); }
+thead th.numeric { text-align: right; }
+
+tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--bg-panel-alt); cursor: pointer; }
+td.numeric { text-align: right; }
+
+.empty-row td { color: var(--text-muted); text-align: center; padding: 24px; cursor: default; }
+.empty-row:hover { background: none; }
+
+.decision-badge, .decision-cell {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.decision-StrongBuy { background: rgba(46,160,67,0.2); color: var(--green-bright); }
+.decision-Buy { background: rgba(46,160,67,0.12); color: var(--green); }
+.decision-Watch { background: rgba(210,153,34,0.18); color: var(--amber); }
+.decision-Hold { background: rgba(210,153,34,0.12); color: var(--amber); }
+.decision-Sell { background: rgba(208,72,61,0.12); color: var(--red); }
+.decision-StrongSellExit { background: rgba(208,72,61,0.2); color: var(--red-bright); }
+.decision-NoTrade { background: rgba(122,130,145,0.15); color: var(--text-muted); }
+
+.back-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--mono);
+  margin-bottom: 16px;
+}
+.back-btn:hover { color: var(--text-primary); border-color: var(--accent-blue-grey); }
+
+.drilldown-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.drilldown-header h1 { font-family: var(--mono); font-size: 22px; margin: 0; }
+.confidence-badge { font-family: var(--mono); font-size: 16px; color: var(--text-muted); }
+
+.drilldown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px;
+}
+.panel h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0 0 12px 0;
+}
+
+.reasoning-text { line-height: 1.6; font-size: 13px; }
+
+.layer-table th, .layer-table td { padding: 6px 10px; font-size: 12px; }
+.layer-bar-track { width: 100%; height: 8px; background: var(--bg-panel-alt); border-radius: 4px; overflow: hidden; }
+.layer-bar-fill { height: 100%; }
+.layer-bar-fill.positive { background: var(--green); }
+.layer-bar-fill.negative { background: var(--red); }
+
+.trade-plan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.trade-plan-grid .tp-label { color: var(--text-muted); }
+.trade-plan-grid .tp-value { font-weight: 600; }
+
+.flags-list { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.8; }
+.flags-list .muted { color: var(--text-muted); list-style: none; margin-left: -18px; }
+
+/* Charting Terminal (section 20.2) */
+.chart-link-btn {
+  margin-left: auto;
+  background: var(--accent-blue-grey);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+}
+.chart-link-btn:hover { background: var(--bg-panel-alt); }
+
+#chart-timeframe {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 10px 0 14px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.chart-legend span { display: flex; align-items: center; gap: 6px; }
+.legend-swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend-zone { width: 14px; height: 10px; display: inline-block; border-radius: 2px; }
+.legend-zone.zone-bullish-ob { background: rgba(63,185,80,0.25); border: 1px solid rgba(63,185,80,0.6); }
+.legend-zone.zone-bearish-ob { background: rgba(208,72,61,0.25); border: 1px solid rgba(208,72,61,0.6); }
+.legend-zone.zone-fvg { background: rgba(122,130,145,0.2); border: 1px solid rgba(122,130,145,0.5); }
+
+.chart-container {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  height: 560px;
+}
+.chart-price-pane { position: absolute; inset: 0; }
+
+/* Order Block / FVG zones aren't natively drawn as rectangles by Lightweight
+   Charts' base (non-plugin) API — see app.js's renderZones() doc comment.
+   These are plain positioned divs, converted from price/time to pixel
+   coordinates via the chart's own priceToCoordinate/timeToCoordinate API on
+   every visible-range change, sitting in an absolutely-positioned overlay
+   layer above the canvas. pointer-events: none so they never block chart
+   interaction (crosshair, scroll, zoom). */
+.chart-zone-overlay { position: absolute; inset: 0; pointer-events: none; }
+.chart-zone {
+  position: absolute;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.chart-zone.zone-OrderBlockBullish { background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.45); }
+.chart-zone.zone-OrderBlockBearish { background: rgba(208,72,61,0.15); border: 1px solid rgba(208,72,61,0.45); }
+.chart-zone.zone-FvgBullish, .chart-zone.zone-FvgBearish { background: rgba(122,130,145,0.12); border: 1px dashed rgba(122,130,145,0.4); }

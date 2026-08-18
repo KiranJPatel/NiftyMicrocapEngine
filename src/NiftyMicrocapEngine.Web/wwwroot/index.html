@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nifty Microcap Engine — Scan Terminal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- TradingView Lightweight Charts (open-source, MIT-licensed candlestick library — no build step, matches this dashboard's vanilla-JS-only approach). -->
+  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-title">NIFTY MICROCAP ENGINE</div>
+    <div class="app-controls">
+      <label for="date-input">As of</label>
+      <input id="date-input" type="date" />
+      <button id="run-scan-btn">Run Scan</button>
+      <span id="scan-status" class="status-text"></span>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section id="scan-results-view" class="view active">
+      <div class="results-toolbar">
+        <div class="stat-block">
+          <span class="stat-label">Stage 1 scanned</span>
+          <span id="stat-stage1-scanned" class="stat-value">-</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">Excluded (data quality)</span>
+          <span id="stat-stage1-excluded" class="stat-value">-</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">Stage 2 shortlist</span>
+          <span id="stat-stage2-size" class="stat-value">-</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">Stage 1 / Stage 2 duration</span>
+          <span id="stat-durations" class="stat-value">-</span>
+        </div>
+
+        <div class="toolbar-filters">
+          <select id="decision-filter">
+            <option value="">All decisions</option>
+            <option value="StrongBuy">Strong Buy</option>
+            <option value="Buy">Buy</option>
+            <option value="Watch">Watch</option>
+            <option value="Hold">Hold</option>
+            <option value="Sell">Sell</option>
+            <option value="StrongSellExit">Strong Sell / Exit</option>
+            <option value="NoTrade">No Trade</option>
+          </select>
+          <input id="symbol-filter" type="text" placeholder="Filter symbol..." />
+        </div>
+      </div>
+
+      <table class="scan-table" id="scan-table">
+        <thead>
+          <tr>
+            <th data-sort="nseSymbol">Symbol</th>
+            <th data-sort="decision">Decision</th>
+            <th data-sort="confidence" class="numeric">Confidence</th>
+            <th data-sort="riskReward" class="numeric">R:R</th>
+            <th data-sort="relativeStrength" class="numeric">Rel. Strength</th>
+          </tr>
+        </thead>
+        <tbody id="scan-table-body">
+          <tr class="empty-row"><td colspan="5">Run a scan to see results.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="drilldown-view" class="view">
+      <button id="back-to-results-btn" class="back-btn">&larr; Back to Scan Results</button>
+
+      <div class="drilldown-header">
+        <h1 id="dd-symbol">-</h1>
+        <span id="dd-decision" class="decision-badge">-</span>
+        <span id="dd-confidence" class="confidence-badge">-</span>
+        <button id="view-chart-btn" class="chart-link-btn">View Chart &rarr;</button>
+      </div>
+
+      <div class="drilldown-grid">
+        <div class="panel">
+          <h2>Reasoning Chain</h2>
+          <p id="dd-reasoning" class="reasoning-text">-</p>
+        </div>
+
+        <div class="panel">
+          <h2>Layer Scores</h2>
+          <table class="layer-table" id="dd-layer-table">
+            <thead><tr><th>Layer</th><th class="numeric">Points</th><th class="numeric">Max</th><th>Bar</th></tr></thead>
+            <tbody id="dd-layer-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <h2>Trade Plan</h2>
+          <div id="dd-trade-plan" class="trade-plan-grid">No trade plan - decision is not Buy/StrongBuy.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Flags</h2>
+          <ul id="dd-flags" class="flags-list"><li class="muted">None</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="chart-view" class="view">
+      <button id="back-to-drilldown-btn" class="back-btn">&larr; Back to Symbol Detail</button>
+
+      <div class="drilldown-header">
+        <h1 id="chart-symbol">-</h1>
+        <select id="chart-timeframe">
+          <option value="Daily" selected>Daily</option>
+          <option value="Weekly">Weekly</option>
+        </select>
+        <span id="chart-status" class="status-text"></span>
+      </div>
+
+      <div class="chart-legend">
+        <span><i class="legend-swatch" style="background:#3fb950"></i>BOS (Bullish)</span>
+        <span><i class="legend-swatch" style="background:#d0483d"></i>BOS (Bearish)</span>
+        <span><i class="legend-swatch" style="background:#f85149"></i>CHoCH</span>
+        <span><i class="legend-swatch" style="background:#d29922"></i>Swing High / Low</span>
+        <span><i class="legend-swatch" style="background:#7d8798"></i>SMC Event</span>
+        <span><i class="legend-zone zone-bullish-ob"></i>Bullish Order Block</span>
+        <span><i class="legend-zone zone-bearish-ob"></i>Bearish Order Block</span>
+        <span><i class="legend-zone zone-fvg"></i>Fair Value Gap</span>
+      </div>
+
+      <div id="chart-container" class="chart-container">
+        <div id="chart-price-pane" class="chart-price-pane"></div>
+        <div id="chart-zone-overlay" class="chart-zone-overlay"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
